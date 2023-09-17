@@ -9,14 +9,14 @@ QT_END_NAMESPACE
 
 class StatusLayoutController : public QWidget {
 Q_OBJECT
-
-public:
-    explicit StatusLayoutController(QWidget *parent = nullptr);
-
-    ~StatusLayoutController() override;
+    //Variables
 private:
     Ui::StatusLayoutController *ui;
-};
 
+    //Methods
+public:
+    explicit StatusLayoutController(QWidget *parent = nullptr);
+    ~StatusLayoutController() override;
+};
 
 #endif //SMALLEXPERTSYSTEM_STATUSLAYOUTCONTROLLER_H

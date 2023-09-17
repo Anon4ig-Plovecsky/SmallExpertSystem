@@ -5,6 +5,7 @@
 StatusLayoutController::StatusLayoutController(QWidget *parent) :
         QWidget(parent), ui(new Ui::StatusLayoutController) {
     ui->setupUi(this);
+
 }
 
 //Destructor

@@ -1,10 +1,12 @@
 #ifndef SMALLEXPERTSYSTEM_MAINWINDOWCONTROLLER_H
 #define SMALLEXPERTSYSTEM_MAINWINDOWCONTROLLER_H
 
+#include <KnowledgeBaseController.h>
 #include <StatusLayoutController.h>
 #include <QApplication>
 #include <QPushButton>
 #include <QMainWindow>
+#include <QFileDialog>
 #include <QKeyEvent>
 #include <iostream>
 #include <QSpinBox>
@@ -16,18 +18,7 @@ QT_END_NAMESPACE
 
 class MainWindowController : public QMainWindow {
 Q_OBJECT
-
-public:
-    explicit MainWindowController(QWidget *parent = nullptr);
-    ~MainWindowController() override;
-private slots:
-    void minusSpinButtonPressed();
-    void plusSpinButtonPressed();
-    void goToNextQuestion();
-
-protected:
-    void keyPressEvent(QKeyEvent *event) override;
-
+    //Variables
 private:
     Ui::MainWindowController *ui;
     //Elements
@@ -35,9 +26,27 @@ private:
     QPushButton *plusSpinButton;
     QPushButton *answerButton;
     QSpinBox *answerSpinBox;
+    QPushButton *openButton;
+    QPushButton *runButton;
     //Widgets
     QWidget *statusWidget;
     StatusLayoutController* statusLayoutController;
+
+    QFile *knowledgeBaseFile;
+
+    //Methods
+public:
+    explicit MainWindowController(QWidget *parent = nullptr);
+    ~MainWindowController() override;
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+private slots:
+    void minusSpinButtonPressed();
+    void plusSpinButtonPressed();
+    void goToNextQuestion();
+    void openFileDialog();
+private:
+    void setEnableElements(bool isEnable);
 };
 
 #endif //SMALLEXPERTSYSTEM_MAINWINDOWCONTROLLER_H

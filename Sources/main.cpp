@@ -5,6 +5,7 @@ int main(int argc, char *argv[]) {
     QFile qFile("../Forms/style.css");
     qFile.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(qFile.readAll());
+    qFile.close();
 
     //application init
     QApplication application(argc, argv);
