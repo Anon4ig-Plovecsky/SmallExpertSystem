@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOUIC_SEARCH_PATHS Interfaces)
+set(CMAKE_AUTOUIC_SEARCH_PATHS Forms)
 
 if (WIN32)
     set(CMAKE_PREFIX_PATH "D:/Qt/6.6.0/mingw_64/lib/cmake")
@@ -17,12 +17,12 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-include_directories(Sources Headers Interfaces)
+include_directories(Sources Headers Forms)
 add_subdirectory(Sources)
 add_subdirectory(Headers)
-add_subdirectory(Interfaces)
+add_subdirectory(Forms)
 
-add_executable(SmallExpertSystem ${SOURCES} ${HEADERS} ${INTERFACES})
+add_executable(SmallExpertSystem ${SOURCES} ${HEADERS} ${FORMS})
 target_link_libraries(SmallExpertSystem
         Qt::Core
         Qt::Gui

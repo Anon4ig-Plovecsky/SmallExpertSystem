@@ -1,0 +1,66 @@
+* {
+    font: 1em "Noto Sans", SansSerif;
+    font-size: 16px;
+}
+#mainWindowWidget {
+    background: #1e1e1e;
+}
+#questionText {
+    background-color: #1e1e1e;
+    border: 2px none #383838;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-radius: 12%;
+}
+QPushButton {
+    color: #ffffff;
+    background-color: #881798;
+    border-width: 0;
+    border-radius: 12%;
+    min-height: 30px;
+}
+QPushButton:hover {
+    background-color: #5a0f65;
+}
+#answerSpinBox {
+    background-color: #1e1e1e;
+    border: 2px none #383838;
+    border-bottom-style: solid;
+}
+#answerSpinBox:focus {
+    border-color: #881798;
+}
+#plusSpinButton,#minusSpinButton {
+    max-width: 30px;
+    max-height: 30px;
+    margin-bottom: 2px;
+    border: 2px none #383838;
+    border-bottom-style: solid;
+    border-radius: 0;
+    background: transparent;
+}
+#plusSpinButton {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+#minusSpinButton {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+#plusSpinButton:hover,#minusSpinButton:hover {
+    background-color: #383838;
+}
+#plusSpinButton:pressed,#minusSpinButton:pressed {
+    background: transparent;
+    border-color: #881798;
+}
+#plusSpinButton:released,#minusSpinButton:released {
+    border-color: #383838;
+}
+QScrollArea {
+    background: transparent;
+    border: 2px none #383838;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-radius: 12%;
+}
