@@ -5,9 +5,11 @@
 #include <utility>
 #include <QString>
 #include <cfloat>
+#include <ranges>
 #include <map>
 
 using namespace std;
+namespace views = std::ranges::views;
 
 class Outcome {
     //Variables

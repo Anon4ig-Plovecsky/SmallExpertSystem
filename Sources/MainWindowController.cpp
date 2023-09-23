@@ -39,7 +39,6 @@ MainWindowController::~MainWindowController() {
     delete runButton;
     delete statusWidget;
     delete statusLayoutController;
-    delete knowledgeBaseFile;
     delete ui;
 }
 
@@ -66,15 +65,27 @@ void MainWindowController::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindowController::openFileDialog() {
-//    setEnableElements(true);
+    delete knowledgeBaseController; //Memory release
+
+    //Opening a file
     auto path = QFileDialog::getOpenFileName(this, tr("Выберите файл"),
                                                      "../", tr("База знаний (*.mkb)"));
     if(std::equal(path.begin(), path.end(), tr("").begin())) return;
     knowledgeBaseFile = new QFile(path);
     knowledgeBaseFile->open(QFile::ReadOnly);
-    auto knowledgeBaseString = QString(knowledgeBaseFile->readAll());
-    auto knowledgeBaseController = new KnowledgeBaseController(knowledgeBaseString);
 
+    //Retrieving data from a file
+    auto knowledgeBaseString = QString(knowledgeBaseFile->readAll());
+    knowledgeBaseFile->close();
+    delete knowledgeBaseFile;
+
+    //Processing of received data
+    knowledgeBaseController = new KnowledgeBaseController(knowledgeBaseString);
+    if(knowledgeBaseController->getProcessingStatus() != KnowledgeBaseProcessingStatus::SUCCESS) {
+        showMessageBox(knowledgeBaseController->getProcessingStatus());
+        return;
+    }
+    setEnableElements(true);
 }
 
 //Set active or inactive elements other than openButton
@@ -84,4 +95,23 @@ void MainWindowController::setEnableElements(bool isEnable) {
     answerSpinBox->setEnabled(isEnable);
     answerButton->setEnabled(isEnable);
     runButton->setEnabled(isEnable);
+}
+
+//Show file opening error message
+void MainWindowController::showMessageBox(KnowledgeBaseProcessingStatus processingStatus) {
+    QString message;
+    switch(processingStatus) {
+        case KnowledgeBaseProcessingStatus::SECTIONS_ERROR:
+            message = QString("Ошибка в секциях");
+            break;
+        case KnowledgeBaseProcessingStatus::EVIDENCE_ERROR:
+            message = QString("Ошибка в свидетельствах");
+            break;
+        case KnowledgeBaseProcessingStatus::OUTCOME_ERROR:
+            message = QString("Ошибка в исходах");
+            break;
+        default: message = QString("");
+            break;
+    }
+    QMessageBox::critical(this, tr("Ошибка открытия файла"), message);
 }

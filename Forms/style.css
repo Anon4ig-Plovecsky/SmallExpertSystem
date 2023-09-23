@@ -2,6 +2,10 @@
     font: 1em "Noto Sans", SansSerif;
     font-size: 16px;
 }
+QMessageBox QPushButton {
+    min-height: 40px;
+    min-width: 50px;
+}
 #mainWindowWidget {
     background: #1e1e1e;
 }

@@ -2,6 +2,7 @@
 #define SMALLEXPERTSYSTEM_KNOWLEDGEBASECONTROLLER_H
 
 #include <KnowledgeBaseProcessingStatus.h>
+#include <QRegularExpression>
 #include <Outcome.h>
 #include <iostream>
 #include <QString>
@@ -31,6 +32,7 @@ private:
     //Methods
 public:
     explicit KnowledgeBaseController(QString knowledgeBaseString);
+    KnowledgeBaseProcessingStatus getProcessingStatus();
 private:
     void getDataFromKnowledgeBase();
     map<int, QString> getEvidences();

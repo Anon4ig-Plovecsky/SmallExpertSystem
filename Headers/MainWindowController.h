@@ -4,6 +4,7 @@
 #include <KnowledgeBaseController.h>
 #include <StatusLayoutController.h>
 #include <QApplication>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QMainWindow>
 #include <QFileDialog>
@@ -32,7 +33,8 @@ private:
     QWidget *statusWidget;
     StatusLayoutController* statusLayoutController;
 
-    QFile *knowledgeBaseFile;
+    QFile *knowledgeBaseFile{};
+    KnowledgeBaseController *knowledgeBaseController;
 
     //Methods
 public:
@@ -47,6 +49,7 @@ private slots:
     void openFileDialog();
 private:
     void setEnableElements(bool isEnable);
+    void showMessageBox(KnowledgeBaseProcessingStatus processingStatus);
 };
 
 #endif //SMALLEXPERTSYSTEM_MAINWINDOWCONTROLLER_H
