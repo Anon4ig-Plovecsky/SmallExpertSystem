@@ -45,14 +45,21 @@ void MainWindowController::minusSpinButtonPressed() {
     answerSpinBox->setValue(answerSpinBox->value() - 1);
 }
 
-
+//Write the result and move on to the next question
 void MainWindowController::goToNextQuestion() {
     //Displaying results in statusLayout
-    statusLayoutController->findPosteriorProbabilities(currentEvidence, (*order)[currentEvidence], answerSpinBox->value());
+    statusLayoutController->findPosteriorProbabilities((*order)[currentEvidence], answerSpinBox->value());
+    statusLayoutController->setHistoryLabel(currentEvidence + 1, answerSpinBox->value(), knowledgeBaseController->getEvidences()[(*order)[currentEvidence]]);
 
     //Show next question
     currentEvidence++;
-    questionText->setText(knowledgeBaseController->getEvidences()[(*order)[currentEvidence]]);
+    if(currentEvidence != knowledgeBaseController->getEvidences().size())
+        questionText->setText(knowledgeBaseController->getEvidences()[(*order)[currentEvidence]]);
+    else {
+        questionText->setText(QString("Опрос завершён"));
+        setEnableElements(false);
+        runButton->setEnabled(true);
+    }
 }
 
 //Press enter(return) in answerSpinBox
@@ -137,6 +144,7 @@ void MainWindowController::runUserSurvey() {
     currentEvidence = 0;
     statusLayoutController->outcomes = knowledgeBaseController->getOutcomes();
     statusLayoutController->setResultLabel();
+    statusLayoutController->historyLabel->setText(QString(""));
     answerSpinBox->setValue(0);
 
     uniform_int_distribution<int> distribution(1, (int)knowledgeBaseController->getEvidences().size());

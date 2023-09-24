@@ -14,7 +14,6 @@
 #include <chrono>
 #include <random>
 #include <QFile>
-#include <set>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowController; }
