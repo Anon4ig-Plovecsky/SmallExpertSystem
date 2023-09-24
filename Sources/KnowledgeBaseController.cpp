@@ -1,5 +1,9 @@
 #include <KnowledgeBaseController.h>
 
+//null constructor
+KnowledgeBaseController::KnowledgeBaseController() {
+    processingStatus = KnowledgeBaseProcessingStatus::SECTIONS_ERROR;
+}
 //Constructor
 KnowledgeBaseController::KnowledgeBaseController(QString knowledgeBaseString) {
     this->knowledgeBaseString = std::move(knowledgeBaseString);
@@ -103,4 +107,9 @@ vector<Outcome> KnowledgeBaseController::getOutcomes() {
 //processingStatus getter
 KnowledgeBaseProcessingStatus KnowledgeBaseController::getProcessingStatus() {
     return processingStatus;
+}
+
+//knowledgeDescription getter
+QString KnowledgeBaseController::getKnowledgeBaseDescription() {
+    return knowledgeBaseDescription;
 }

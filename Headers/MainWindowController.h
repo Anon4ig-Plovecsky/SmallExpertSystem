@@ -11,7 +11,10 @@
 #include <QKeyEvent>
 #include <iostream>
 #include <QSpinBox>
+#include <chrono>
+#include <random>
 #include <QFile>
+#include <set>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowController; }
@@ -25,16 +28,22 @@ private:
     //Elements
     QPushButton *minusSpinButton;
     QPushButton *plusSpinButton;
+    QLabel *detailedDescription;
     QPushButton *answerButton;
+    QLabel *nameDescription;
     QSpinBox *answerSpinBox;
     QPushButton *openButton;
     QPushButton *runButton;
+    QLabel *questionText;
     //Widgets
     QWidget *statusWidget;
     StatusLayoutController* statusLayoutController;
 
     QFile *knowledgeBaseFile{};
     KnowledgeBaseController *knowledgeBaseController;
+    default_random_engine *engine;
+    vector<int> *order = new vector<int>();
+    int currentEvidence = 0;
 
     //Methods
 public:
@@ -47,6 +56,7 @@ private slots:
     void plusSpinButtonPressed();
     void goToNextQuestion();
     void openFileDialog();
+    void runUserSurvey();
 private:
     void setEnableElements(bool isEnable);
     void showMessageBox(KnowledgeBaseProcessingStatus processingStatus);

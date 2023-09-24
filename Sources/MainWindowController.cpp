@@ -5,6 +5,9 @@
 MainWindowController::MainWindowController(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindowController) {
     ui->setupUi(this);
+    unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
+    engine = new default_random_engine(seed);
+    knowledgeBaseController = new KnowledgeBaseController();
 
     //Widget init
     statusWidget = ui->statusWidget;
@@ -12,10 +15,13 @@ MainWindowController::MainWindowController(QWidget *parent) :
     statusWidget->layout()->addWidget(statusLayoutController);
 
     //Elements init
+    detailedDescription = ui->detailedDescription;
+    nameDescription = ui->nameDescription;
     minusSpinButton = ui->minusSpinButton;
     plusSpinButton = ui->plusSpinButton;
     answerSpinBox = ui->answerSpinBox;
     answerButton = ui->answerButton;
+    questionText = ui->questionText;
     openButton = ui->openButton;
     runButton = ui->runButton;
 
@@ -24,22 +30,10 @@ MainWindowController::MainWindowController(QWidget *parent) :
     connect(plusSpinButton, &QPushButton::clicked, this, &MainWindowController::plusSpinButtonPressed);
     connect(answerButton, &QPushButton::clicked, this, &MainWindowController::goToNextQuestion);
     connect(openButton, &QPushButton::clicked, this, &MainWindowController::openFileDialog);
+    connect(runButton, &QPushButton::clicked, this, &MainWindowController::runUserSurvey);
 
     //Deactivation of elements
     setEnableElements(false);
-}
-
-//Destructor
-MainWindowController::~MainWindowController() {
-    delete minusSpinButton;
-    delete plusSpinButton;
-    delete answerSpinBox;
-    delete answerButton;
-    delete openButton;
-    delete runButton;
-    delete statusWidget;
-    delete statusLayoutController;
-    delete ui;
 }
 
 //Buttons for AnswerSpinBox: Button "+"
@@ -53,7 +47,12 @@ void MainWindowController::minusSpinButtonPressed() {
 
 
 void MainWindowController::goToNextQuestion() {
-    std::cout << "Result: " << answerSpinBox->value() << std::endl; //TODO
+    //Displaying results in statusLayout
+    statusLayoutController->findPosteriorProbabilities(currentEvidence, (*order)[currentEvidence], answerSpinBox->value());
+
+    //Show next question
+    currentEvidence++;
+    questionText->setText(knowledgeBaseController->getEvidences()[(*order)[currentEvidence]]);
 }
 
 //Press enter(return) in answerSpinBox
@@ -65,12 +64,16 @@ void MainWindowController::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindowController::openFileDialog() {
+    setEnableElements(false);
     delete knowledgeBaseController; //Memory release
 
     //Opening a file
     auto path = QFileDialog::getOpenFileName(this, tr("Выберите файл"),
                                                      "../", tr("База знаний (*.mkb)"));
-    if(std::equal(path.begin(), path.end(), tr("").begin())) return;
+    if(std::equal(path.begin(), path.end(), tr("").begin())) {
+        knowledgeBaseController = new KnowledgeBaseController();
+        return;
+    }
     knowledgeBaseFile = new QFile(path);
     knowledgeBaseFile->open(QFile::ReadOnly);
 
@@ -85,7 +88,17 @@ void MainWindowController::openFileDialog() {
         showMessageBox(knowledgeBaseController->getProcessingStatus());
         return;
     }
-    setEnableElements(true);
+    runButton->setEnabled(true);
+
+    //Show description
+    auto nameDescriptionQString = std::move(knowledgeBaseController->getKnowledgeBaseDescription()).section("\r\n", 0, 0, QString::SectionSkipEmpty);
+    auto detailedDescriptionQString = std::move(knowledgeBaseController->getKnowledgeBaseDescription()).section("\r\n", 1);
+    nameDescription->setText(nameDescriptionQString);
+    detailedDescription->setText(detailedDescriptionQString);
+
+    //Show outcomes
+    statusLayoutController->outcomes = knowledgeBaseController->getOutcomes();
+    statusLayoutController->setResultLabel();
 }
 
 //Set active or inactive elements other than openButton
@@ -114,4 +127,45 @@ void MainWindowController::showMessageBox(KnowledgeBaseProcessingStatus processi
             break;
     }
     QMessageBox::critical(this, tr("Ошибка открытия файла"), message);
+}
+
+//Starts displaying questions from the knowledge base and accepting answers
+void MainWindowController::runUserSurvey() {
+    //data reset and releasing then initializing order
+    delete order;
+    order = new vector<int>();
+    currentEvidence = 0;
+    statusLayoutController->outcomes = knowledgeBaseController->getOutcomes();
+    statusLayoutController->setResultLabel();
+    answerSpinBox->setValue(0);
+
+    uniform_int_distribution<int> distribution(1, (int)knowledgeBaseController->getEvidences().size());
+
+    //fill order
+    while(order->size() != knowledgeBaseController->getEvidences().size()) {
+        auto number = distribution(*engine);
+        if(std::find(order->begin(), order->end(), number) == order->end())
+            order->push_back(number);
+    }
+
+    //Displaying evidence on the screen and enabling all elements
+    setEnableElements(true);
+    questionText->setText(knowledgeBaseController->getEvidences()[(*order)[currentEvidence]]);
+}
+
+//Destructor
+MainWindowController::~MainWindowController() {
+    delete detailedDescription;
+    delete nameDescription;
+    delete minusSpinButton;
+    delete plusSpinButton;
+    delete answerSpinBox;
+    delete answerButton;
+    delete openButton;
+    delete runButton;
+    delete statusWidget;
+    delete statusLayoutController;
+    delete engine;
+    delete order;
+    delete ui;
 }

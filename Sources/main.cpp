@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
 
     //application init
     QApplication application(argc, argv);
+    QApplication::setWindowIcon(QIcon("../Icons/titleIcon.png"));
     application.setStyleSheet(styleSheet);
 
     //MainWindowController init

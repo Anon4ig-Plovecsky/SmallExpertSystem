@@ -15,10 +15,6 @@ Outcome::Outcome(QString name, double priorProbability, map<int, pair<double, do
 QString Outcome::getName() {
     return name;
 }
-//priorProbability getter
-double Outcome::getPriorProbability() {
-    return priorProbability;
-}
 //probabilities getter
 map<int, pair<double, double>> Outcome::getProbabilities() {
     return probabilities;

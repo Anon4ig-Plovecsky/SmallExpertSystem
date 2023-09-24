@@ -5,6 +5,7 @@
 #include <utility>
 #include <QString>
 #include <cfloat>
+#include <cmath>
 #include <ranges>
 #include <map>
 
@@ -13,9 +14,10 @@ namespace views = std::ranges::views;
 
 class Outcome {
     //Variables
+public:
+    double priorProbability;
 private:
     QString name;
-    double priorProbability;
     map<int, pair<double, double>> probabilities;
 
     //Methods
@@ -24,7 +26,6 @@ public:
     Outcome(QString name, double priorProbability,
                      map<int, pair<double, double>> probabilities);
     QString getName();
-    double getPriorProbability();
     map<int, pair<double, double>> getProbabilities();
 };
 

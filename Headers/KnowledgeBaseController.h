@@ -31,12 +31,14 @@ private:
 
     //Methods
 public:
+    KnowledgeBaseController();
     explicit KnowledgeBaseController(QString knowledgeBaseString);
     KnowledgeBaseProcessingStatus getProcessingStatus();
-private:
-    void getDataFromKnowledgeBase();
+    QString getKnowledgeBaseDescription();
     map<int, QString> getEvidences();
     vector<Outcome> getOutcomes();
+private:
+    void getDataFromKnowledgeBase();
 };
 
 #endif //SMALLEXPERTSYSTEM_KNOWLEDGEBASECONTROLLER_H
