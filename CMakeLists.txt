@@ -22,7 +22,15 @@ add_subdirectory(Sources)
 add_subdirectory(Headers)
 add_subdirectory(Forms)
 
-add_executable(SmallExpertSystem ${SOURCES} ${HEADERS} ${FORMS})
+if(WIN32)
+    add_executable(SmallExpertSystem WIN32 ${SOURCES} ${HEADERS} ${FORMS} Icons/mainIcon.rc)
+else()
+    add_executable(SmallExpertSystem ${SOURCES} ${HEADERS} ${FORMS} Icons/mainIcon.rc)
+endif()
+
+set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 ${CMAKE_CXX_STANDARD_LIBRARIES}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive")
+
 target_link_libraries(SmallExpertSystem
         Qt::Core
         Qt::Gui

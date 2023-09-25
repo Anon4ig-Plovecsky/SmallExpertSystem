@@ -1,0 +1,6 @@
+#ifndef MAINICON_RC
+#define MAINICON_RC
+
+MAINICON ICON "./titleIcon.ico"
+
+#endif //MAINICON_RC
