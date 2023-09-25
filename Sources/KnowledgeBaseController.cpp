@@ -77,7 +77,7 @@ vector<Outcome> KnowledgeBaseController::getOutcomes() {
 
         //Regular Expression on int and double
         QRegularExpression qRegularExpression[] { QRegularExpression(QRegularExpression::anchoredPattern("\\d+")),                       //Evidence number
-                                                  QRegularExpression(QRegularExpression::anchoredPattern(R"((1\.0+|1|(0\.\d+)))"))};     //Probability values
+                                                  QRegularExpression(QRegularExpression::anchoredPattern(R"((1\.0+|[10]|(0\.\d+)))"))};     //Probability values
         for(auto parameterIndex : views::iota(2, outcomeParameters.length())) {
             //Checking numbers for int, double, double and for missing key
             auto parameterValues = outcomeParameters[parameterIndex].split(",");
@@ -86,7 +86,7 @@ vector<Outcome> KnowledgeBaseController::getOutcomes() {
                     !qRegularExpression[0].match(parameterValues[0]).hasMatch() ||
                     !qRegularExpression[1].match(parameterValues[1]).hasMatch() ||
                     !qRegularExpression[1].match(parameterValues[2]).hasMatch() ||
-                    outcomeProbabilities.find(parameterValues[0].toInt()) != outcomeProbabilities.end()
+                    outcomeProbabilities.find(parameterValues[0].toInt())->first != outcomeProbabilities.end()->first
             ) return *(new vector<Outcome>());
 
             //Get probabilities

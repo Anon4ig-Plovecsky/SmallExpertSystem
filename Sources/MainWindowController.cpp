@@ -53,13 +53,16 @@ void MainWindowController::goToNextQuestion() {
 
     //Show next question
     currentEvidence++;
-    if(currentEvidence != knowledgeBaseController->getEvidences().size())
-        questionText->setText(knowledgeBaseController->getEvidences()[(*order)[currentEvidence]]);
-    else {
-        questionText->setText(QString("Опрос завершён"));
+    if(currentEvidence == knowledgeBaseController->getEvidences().size() //if all questions have been asked--
+        || std::find_if(statusLayoutController->outcomes.begin(), statusLayoutController->outcomes.end(), // or if the probabilities of all outcomes are zero
+                        [](const Outcome& outcome) {
+            return outcome.priorProbability != 0.0;
+        }) == statusLayoutController->outcomes.end()) {
+        questionText->setText(QString("Консультация завершена"));
         setEnableElements(false);
         runButton->setEnabled(true);
     }
+    else questionText->setText(knowledgeBaseController->getEvidences()[(*order)[currentEvidence]]);
 }
 
 //Press enter(return) in answerSpinBox
